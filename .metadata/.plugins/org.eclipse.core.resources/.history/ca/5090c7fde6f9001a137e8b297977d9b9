@@ -1,0 +1,20 @@
+package com.test.Model;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+/**
+ * 
+ * @author MANEL
+ *
+ */
+@Entity
+@Table(name="workflow")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idWorkflow")
+
+public class Workflow {
+
+}

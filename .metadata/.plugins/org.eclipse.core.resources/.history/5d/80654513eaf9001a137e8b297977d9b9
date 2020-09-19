@@ -1,0 +1,202 @@
+package com.test.Model;
+
+import java.io.Serializable;
+import java.security.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
+
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+/**
+ * 
+ * @author MANEL
+ *
+ */
+
+@Entity
+@Table(name = "workflowCategory")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idCategory")
+public class WorkflowCategory implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long idCategory;
+
+	@Column(name = "name")
+	private String name;
+	@Column(name = "description")
+	private String description;
+	@Column(name = "logo")
+	private String logo;
+	@Column(name = "createAt")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Timestamp createAt;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updateAt")
+	private Timestamp updateAt;
+	 /** 
+     * Status is an integer attribute 
+     * between 1 and 5. 
+     */
+	@Column(name = "status")
+	@Min(value = 1)
+	@Max(value = 5)
+	private int status;
+/**
+ * a self recursive relationship entity
+ * a workflowCategory has one parent
+ */
+	@OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<WorkflowCategory> workflowCategorys = new ArrayList<WorkflowCategory>();
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parentCategory")
+	private WorkflowCategory parentCategory;
+	
+	/**
+	 * this is a ManyTMany relationship between workflowCategory and workflow
+	 * workflowCategory have list of workflow.
+	 */
+
+	@ManyToMany(mappedBy = "workflowCategory", fetch = FetchType.EAGER)
+	private List<Workflow> workflows = new ArrayList<Workflow>();
+
+	public Long getIdCategory() {
+		return idCategory;
+	}
+
+	public void setIdCategory(Long idCategory) {
+		this.idCategory = idCategory;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+	public Timestamp getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Timestamp createAt) {
+		this.createAt = createAt;
+	}
+
+	public Timestamp getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Timestamp updateAt) {
+		this.updateAt = updateAt;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public List<WorkflowCategory> getWorkflowCategorys() {
+		return workflowCategorys;
+	}
+
+	public void setWorkflowCategorys(List<WorkflowCategory> workflowCategorys) {
+		this.workflowCategorys = workflowCategorys;
+	}
+
+	public WorkflowCategory getParentCategory() {
+		return parentCategory;
+	}
+
+	public void setParentCategory(WorkflowCategory parentCategory) {
+		this.parentCategory = parentCategory;
+	}
+
+	public List<Workflow> getWorkflows() {
+		return workflows;
+	}
+
+	public void setWorkflows(List<Workflow> workflows) {
+		this.workflows = workflows;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public WorkflowCategory(Long idCategory, String name, String description, String logo, Timestamp createAt,
+			Timestamp updateAt, @Min(1) @Max(5) int status, List<WorkflowCategory> workflowCategorys,
+			WorkflowCategory parentCategory, List<Workflow> workflows) {
+		super();
+		this.idCategory = idCategory;
+		this.name = name;
+		this.description = description;
+		this.logo = logo;
+		this.createAt = createAt;
+		this.updateAt = updateAt;
+		this.status = status;
+		this.workflowCategorys = workflowCategorys;
+		this.parentCategory = parentCategory;
+		this.workflows = workflows;
+	}
+
+	public WorkflowCategory() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "WorkflowCategory [idCategory=" + idCategory + ", name=" + name + ", description=" + description
+				+ ", logo=" + logo + ", createAt=" + createAt + ", updateAt=" + updateAt + ", status=" + status
+				+ ", workflowCategorys=" + workflowCategorys + ", parentCategory=" + parentCategory + ", workflows="
+				+ workflows + "]";
+	}
+	
+
+}
